@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div id="fb-root">
+        <input type="button" value="Login" onclick="FbApp_Login();" />
+    </div>
+
+    <fb:login-button config_id="431129842730204"
+                     onlogin="checkLoginState();">
+    </fb:login-button>
+
+    <div class="fb-like"
+         data-share="true"
+         data-width="450"
+         data-show-faces="true">
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        console.log(999)
+        function FbApp_Login() {
+            FB.login(function (response) {
+                console.log(response)
+                if (response.authResponse) {
+                    // some code here
+                    console.log('Welcome!  Fetching your information.... ');
+                    FB.api('/me', { fields: 'name, email' }, function (response) {
+                        document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". i see your email address is " + response.email
+                    });
+                }
+                else {
+                    alert("Attempt of Login is Failed!");
+                }
+            }, { scope: 'email,user_photos,publish_actions' });
+        }
+
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        }
+    </script>
+}
+
+@* https://fbohorqu.medium.com/implementing-facebook-js-sdk-login-frontend-rails-api-backend-62bcbaa3f7da *@
